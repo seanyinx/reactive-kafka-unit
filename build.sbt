@@ -29,5 +29,6 @@ libraryDependencies ++= Seq(
 libraryDependencies ++= Seq(
   "org.scalactic" %% "scalactic" % "2.2.6",
   "org.scalatest" %% "scalatest" % "2.2.6" % "test",
+  "net.manub" %% "scalatest-embedded-kafka" % "0.6.1" % "test",
   "com.github.charithe" % "kafka-junit" % "2.1" % "test"
 )

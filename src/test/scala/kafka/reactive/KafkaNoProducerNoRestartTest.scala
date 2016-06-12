@@ -5,18 +5,19 @@ import akka.kafka.scaladsl._
 import akka.kafka.{ConsumerSettings, ProducerSettings}
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{Sink, Source}
+import net.manub.embeddedkafka.EmbeddedKafkaConfig
 import org.apache.curator.test.InstanceSpec
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 import org.apache.kafka.common.serialization.{StringDeserializer, StringSerializer}
 import org.scalatest._
-import scaffolding.EmbeddedKafka
+import net.manub.embeddedkafka.EmbeddedKafka
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
 class KafkaNoProducerNoRestartTest extends WordSpec with BeforeAndAfter with BeforeAndAfterAll with Matchers {
-  private val embeddedKafka = EmbeddedKafka(port)
+  implicit val config = EmbeddedKafkaConfig(kafkaPort = port)
 
   implicit val system = ActorSystem("KafkaReactiveTest")
   implicit val materializer = ActorMaterializer()
@@ -25,11 +26,11 @@ class KafkaNoProducerNoRestartTest extends WordSpec with BeforeAndAfter with Bef
   lazy val port = InstanceSpec.getRandomPort
 
   override protected def beforeAll(): Unit = {
-    embeddedKafka.start()
+    EmbeddedKafka.start()
   }
 
   override protected def afterAll(): Unit = {
-    embeddedKafka.stop()
+    EmbeddedKafka.stop()
     system.terminate()
   }
 

@@ -10,13 +10,13 @@ import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.serialization.{StringDeserializer, StringSerializer}
 import org.scalatest._
-import scaffolding.EmbeddedKafka
+import net.manub.embeddedkafka.{EmbeddedKafka, EmbeddedKafkaConfig}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
 class KafkaRestartForEachTest extends WordSpec with BeforeAndAfter with BeforeAndAfterAll with Matchers {
-  private val embeddedKafka = EmbeddedKafka(port)
+  implicit val config = EmbeddedKafkaConfig(kafkaPort = port)
 
   implicit val system = ActorSystem("KafkaReactiveTest")
   implicit val materializer = ActorMaterializer()
@@ -25,11 +25,11 @@ class KafkaRestartForEachTest extends WordSpec with BeforeAndAfter with BeforeAn
   lazy val port = InstanceSpec.getRandomPort
 
   before {
-    embeddedKafka.start()
+    EmbeddedKafka.start()
   }
 
   after {
-    embeddedKafka.stop()
+    EmbeddedKafka.stop()
   }
 
 
